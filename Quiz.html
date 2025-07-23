@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz App</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, ;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        display: flex;
+        margin: 0;
+        background-color: #f0f4f8;
+        color: #333;
+    }
+
+    .card {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    button {
+        padding: 12px 24px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #388E3C;
+    }
+    footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #999;
+    }
+    </style>
+</head>
+<body>
+    <div class="card">
+    <h1>Simple Quiz App</h1>
+    <p>Test Your Knowledge With This Quiz</p>
+    <p>Answer the questions to the best of your ability.</p>
+    <p>Refresh the page to retake the quiz.</p>
+    <p>Click the button below to start the quiz.</p>
+    <button onclick="runQuiz()">Start Quiz</button>
+    <footer>
+    <p>Quiz App © 2025 Hikma</p>
+    </footer>
+    </div>
+
+    <script>
+    const questions = [
+        {
+        question: "What is the capital of Ethiopia?",
+        answer: "Addis Ababa"
+        },
+        {
+        question: "What does JS stand for?",
+        answer: "JavaScript"
+        },
+        {
+        question: "What is 3 + 4?",
+        answer: "7"
+        },
+        { question: "What is the largest planet in our solar system?",
+        answer: "Jupiter"
+        },
+        { question: "What is the boiling point of water in Celsius?",
+        answer: "100"
+        },
+        
+    ];
+
+    function runQuiz() {
+        let score = 0;
+
+        for (let i = 0; i < questions.length; i++) {
+        const userAnswer = prompt(questions[i].question);
+        if (
+            userAnswer &&
+            userAnswer.trim().toLowerCase() === questions[i].answer.toLowerCase()
+        ) {
+            alert("✅ Correct!");
+            score++;
+        } else {
+            alert(" Wrong! Correct answer: " + questions[i].answer);
+        }
+        }
+
+        alert(` You scored ${score} out of ${questions.length}`);
+    }
+    </script>
+
+
+</body>
+</html>
