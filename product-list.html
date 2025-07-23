@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product List</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f7f9fb;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: translateY(-5px) scale(1.02);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    li {
+      background: white;
+      margin: 10px 0;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 18px;
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    li:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .price {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+
+    form {
+      margin-top: 30px;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      width: 200px;
+    }
+
+    #add-btn {
+      background-color: #28a745;
+    }
+
+    #add-btn:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛍️ Product List</h1>
+
+  <div class="buttons">
+    <button id="sort-price">🔽 Sort by Price</button>
+    <button id="sort-name">🔤 Sort by Name</button>
+  </div>
+
+  <ul id="product-list"></ul>
+
+  <form id="product-form">
+    <input type="text" id="product-name" placeholder="Product name (🧢 Hat)" required />
+    <input type="number" id="product-price" placeholder="Price" min="0" step="0.01" required />
+    <button type="submit" id="add-btn">➕ Add Product</button>
+  </form>
+
+  <script>
+    let products = [
+      { id: 1, name: "👟 Sneakers", price: 59.99 },
+      { id: 2, name: "⌚ Watch", price: 129.99 },
+      { id: 3, name: "🎒 Backpack", price: 79.99 },
+      { id: 4, name: "🎧 Headphones", price: 99.99 },
+      { id: 5, name: "🕶️ Sunglasses", price: 39.99 },
+      { id: 6, name: "🧥 Jacket", price: 89.99 }
+    ];
+
+    const productList = document.getElementById("product-list");
+    const sortByPriceBtn = document.getElementById("sort-price");
+    const sortByNameBtn = document.getElementById("sort-name");
+    const productForm = document.getElementById("product-form");
+
+    // Render function
+    function renderProducts(productArray) {
+      productList.innerHTML = "";
+      productArray.forEach(product => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          ${product.name} - 
+          <span class="price">$${product.price.toFixed(2)}</span>
+        `;
+        productList.appendChild(li);
+      });
+    }
+
+    // Initial render
+    renderProducts(products);
+
+    // Sort by price
+    sortByPriceBtn.addEventListener("click", () => {
+      const sorted = [...products].sort((a, b) => a.price - b.price);
+      renderProducts(sorted);
+    });
+
+    // Sort by name
+    sortByNameBtn.addEventListener("click", () => {
+      const sorted = [...products].sort((a, b) => a.name.localeCompare(b.name));
+      renderProducts(sorted);
+    });
+
+    // Add new product
+    productForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById("product-name");
+      const priceInput = document.getElementById("product-price");
+
+      const name = nameInput.value.trim();
+      const price = parseFloat(priceInput.value);
+
+      if (name && !isNaN(price)) {
+        const newProduct = {
+          id: products.length + 1,
+          name,
+          price
+        };
+        products.push(newProduct);
+        renderProducts(products);
+        nameInput.value = "";
+        priceInput.value = "";
+      }
+    });
+  </script>
+
+</body>
+</html>
