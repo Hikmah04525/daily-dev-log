@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do App</title>
+  <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: white;
+        padding: 25px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    #todo-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    #todo-form input[type="text"] {
+        flex: 1 1 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    #todo-form button {
+        flex: 1 1 100%;
+        padding: 12px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    #todo-form button:hover {
+        background-color: #0056b3;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        background: #f0f0f0;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        word-wrap: break-word;
+    }
+
+    .action-group {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .action-group label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+    }
+
+    .confirm-btn {
+        flex: 1 1 auto;
+        padding: 6px 12px;
+        background-color:#007bff ;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .confirm-btn:hover {
+        background-color: #0056b3 ;
+    }
+
+    .done {
+        text-decoration: line-through;
+        color: gray;
+    }
+
+    @media (min-width: 600px) {
+        #todo-form {
+        flex-wrap: nowrap;
+        }
+
+        #todo-form input[type="text"],
+        #todo-form button {
+        flex: 1;
+        }
+
+        #todo-form button {
+        max-width: 150px;
+        }
+    }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+    <h1>To-Do App</h1>
+
+    <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a new task..." required />
+        <button type="submit">Add</button>
+    </form>
+
+    <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+    const form = document.getElementById("todo-form");
+    const input = document.getElementById("todo-input");
+    const list = document.getElementById("todo-list");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const taskText = input.value.trim();
+        if (taskText === "") return;
+
+        const li = document.createElement("li");
+
+      //  Checkbox to mark as done
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.style.marginRight = "8px";
+
+        const span = document.createElement("span");
+        span.textContent = taskText;
+
+        checkbox.addEventListener("change", () => {
+        span.classList.toggle("done", checkbox.checked);
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+
+      //  Edit / Delete Radio + Confirm
+        const actionGroup = document.createElement("div");
+        actionGroup.classList.add("action-group");
+
+        const editLabel = document.createElement("label");
+        const editRadio = document.createElement("input");
+        editRadio.type = "radio";
+        editRadio.name = "action-" + Date.now();
+        editRadio.value = "edit";
+        editLabel.appendChild(editRadio);
+        editLabel.appendChild(document.createTextNode("Edit"));
+
+        const deleteLabel = document.createElement("label");
+        const deleteRadio = document.createElement("input");
+        deleteRadio.type = "radio";
+        deleteRadio.name = editRadio.name;
+        deleteRadio.value = "delete";
+        deleteLabel.appendChild(deleteRadio);
+        deleteLabel.appendChild(document.createTextNode("Delete"));
+
+        const confirmBtn = document.createElement("button");
+        confirmBtn.textContent = "Confirm";
+        confirmBtn.classList.add("confirm-btn");
+
+        actionGroup.appendChild(editLabel);
+        actionGroup.appendChild(deleteLabel);
+        actionGroup.appendChild(confirmBtn);
+        li.appendChild(actionGroup);
+        list.appendChild(li);
+        input.value = "";
+
+        let isEditing = false;
+
+        confirmBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if (editRadio.checked) {
+            if (!isEditing) {
+            const editInput = document.createElement("input");
+            editInput.type = "text";
+            editInput.value = span.textContent;
+            editInput.style.flex = "1";
+            li.insertBefore(editInput, span);
+            li.removeChild(span);
+            isEditing = true;
+            confirmBtn.textContent = "Save";
+            } else {
+            const newSpan = document.createElement("span");
+            const editedValue = li.querySelector("input[type='text']").value.trim();
+            newSpan.textContent = editedValue === "" ? "(Empty Task)" : editedValue;
+            li.insertBefore(newSpan, li.querySelector("input[type='text']"));
+            li.removeChild(li.querySelector("input[type='text']"));
+            span.textContent = newSpan.textContent;
+            isEditing = false;
+            confirmBtn.textContent = "Confirm";
+            if (checkbox.checked) newSpan.classList.add("done");
+            }
+        } else if (deleteRadio.checked) {
+            li.remove();
+        } else {
+            alert("Please select Edit or Delete first.");
+        }
+        });
+    });
+    </script>
+
+</body>
+</html>
