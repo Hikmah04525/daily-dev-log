@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Counter App</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+        padding: 50px;
+        background: #f0f4f8;
+    }
+
+    .container {
+        max-width: 300px;
+        margin: auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    #counter {
+        font-size: 60px;
+        margin: 20px 0;
+        color: #333;
+    }
+
+    .buttons button {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px 5px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #increase { background-color: #25f344; color: white; }
+    #decrease { background-color: #f44336; color: white; }
+    #reset { background-color: #c1df14; color: white; }
+
+    button:hover {
+        opacity: 0.9;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+    <h1>Counter App</h1>
+    <div id="counter">0</div>
+    <div class="buttons">
+        <button id="increase">➕ Increase</button>
+        <button id="decrease">➖ Decrease</button>
+        <button id="reset">🔁 Reset</button>
+    </div>
+    </div>
+
+    <script>
+    let count = 0;
+
+    const counterDisplay = document.getElementById('counter');
+    const increaseBtn = document.getElementById('increase');
+    const decreaseBtn = document.getElementById('decrease');
+    const resetBtn = document.getElementById('reset');
+
+    function updateDisplay() {
+        counterDisplay.textContent = count;
+    }
+
+    increaseBtn.addEventListener('click', () => {
+        count++;
+        updateDisplay();
+    });
+
+    decreaseBtn.addEventListener('click', () => {
+        count--;
+        updateDisplay();
+    });
+
+    resetBtn.addEventListener('click', () => {
+        count = 0;
+        updateDisplay();
+    });
+    </script>
+
+</body>
+</html>
